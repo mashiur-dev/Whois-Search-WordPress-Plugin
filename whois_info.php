@@ -65,6 +65,23 @@ function whoisResult() {
             ob_start();
             ?>  
                 <style>
+                    #whoisForm {
+                        margin: 30px 0px;
+                    }
+                    #whoisForm input[type="text"] {
+                        border: 1px solid #dcdcdc;
+                        padding: 10px 10px;
+                    }
+                    #whoisForm button {
+                        padding: 10px 15px;
+                        font-size: 18px;
+                        background: #000000;
+                        color: #fff;
+                    }
+                    #whoisForm button, #whoisForm input {
+                        border-radius: 0px;
+                    }
+
                     .whois-result h2.title {
                         font-size: 25px;
                         line-height: 35px;
@@ -148,7 +165,7 @@ function whoisForm( $atts ) {
         'rpage' => '#',
     ), $atts );
 
-    return '<form action="'.$atts['rpage'].'" method="post">
+    return '<form id="whoisForm" action="'.$atts['rpage'].'" method="post">
                 <input type="text" name="whois_domain" placeholder="domain.com">
                 <button type="submit" name="apisearch">Search</button>
             </form>';
