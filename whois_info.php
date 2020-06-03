@@ -64,57 +64,6 @@ function whoisResult() {
             
             ob_start();
             ?>  
-                <style>
-                    #whoisForm {
-                        margin: 30px 0px;
-                    }
-                    #whoisForm input[type="text"] {
-                        border: 1px solid #dcdcdc;
-                        padding: 10px 10px;
-                    }
-                    #whoisForm button {
-                        padding: 10px 15px;
-                        font-size: 18px;
-                        background: #000000;
-                        color: #fff;
-                    }
-                    #whoisForm button, #whoisForm input {
-                        border-radius: 0px;
-                    }
-
-                    .whois-result h2.title {
-                        font-size: 25px;
-                        line-height: 35px;
-                        margin-bottom: 20px;
-                    }
-                    .whois-result h2.title span {
-                        color: #ff3d00;
-                    }
-                    .whois-result .info-section {
-                        background: #f4f4f4;
-                        margin-bottom: 40px;
-                    }
-                    .whois-result .info-section > * {
-                        padding: 0px 20px;
-                        margin: 0px;
-                    }
-                    .whois-result .info-section h3.title {
-                        background: #000000;
-                        color: #fff;
-                        padding: 5px 10px;
-                        font-size: 16px;
-                        text-transform: uppercase;
-                        font-weight: bold;
-                    }
-                    .whois-result .info-section p {
-                        font-size: 14px;
-                        margin-top: 5px;
-                        color: #000;
-                        border-bottom: 1px solid #dcdcdc;
-                        padding-bottom: 5px;
-                    }
-                </style>
-
                 <div class="whois-result">
                     <h2 class="title">Whois Record for <span><?php echo $domainName; ?></span></h2>
 
@@ -162,12 +111,71 @@ add_shortcode( 'whois_result', 'whoisResult' );
 // shortcode for Form [whois_form rpage="/result-page"]
 function whoisForm( $atts ) {
     $atts = shortcode_atts( array(
-        'rpage' => '#',
+        'rpage' => '',
     ), $atts );
 
-    return '<form id="whoisForm" action="'.$atts['rpage'].'" method="post">
-                <input type="text" name="whois_domain" placeholder="domain.com">
-                <button type="submit" name="apisearch">Search</button>
-            </form>';
+    ob_start();
+    ?>  
+        <style>
+            #whoisForm {
+                margin: 30px 0px;
+            }
+            #whoisForm input[type="text"] {
+                border: 1px solid #dcdcdc;
+                padding: 10px 10px;
+                width: 70%;
+            }
+            #whoisForm button {
+                padding: 10px 15px;
+                font-size: 18px;
+                background: #000000;
+                color: #fff;
+                width: 25%;
+                border: 0px;
+            }
+            #whoisForm button, #whoisForm input {
+                border-radius: 0px;
+            }
+
+            .whois-result h2.title {
+                font-size: 25px;
+                line-height: 35px;
+                margin-bottom: 20px;
+            }
+            .whois-result h2.title span {
+                color: #ff3d00;
+            }
+            .whois-result .info-section {
+                background: #f4f4f4;
+                margin-bottom: 40px;
+            }
+            .whois-result .info-section > * {
+                padding: 0px 20px;
+                margin: 0px;
+            }
+            .whois-result .info-section h3.title {
+                background: #000000;
+                color: #fff;
+                padding: 5px 10px;
+                font-size: 16px;
+                text-transform: uppercase;
+                font-weight: bold;
+            }
+            .whois-result .info-section p {
+                font-size: 14px;
+                margin-top: 5px;
+                color: #000;
+                border-bottom: 1px solid #dcdcdc;
+                padding-bottom: 5px;
+            }
+        </style>
+
+        <form id="whoisForm" action="<?php echo $atts['rpage']; ?>" method="post">
+            <input type="text" name="whois_domain" placeholder="domain.com">
+            <button type="submit" name="apisearch">Search</button>
+        </form>
+
+    <?php
+        return ob_get_clean();
 }
 add_shortcode( 'whois_form', 'whoisForm' );
