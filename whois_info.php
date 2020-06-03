@@ -35,7 +35,7 @@ if (!function_exists('whoisApi')) {
 }
 
 
-// [whois_result api=""]
+// [whois_result]
 function whoisResult() {
 
     if( isset($_POST['apisearch']) && !empty($_POST['whois_domain']) ){
@@ -61,9 +61,76 @@ function whoisResult() {
             $ownerCountry = $whoisData["registrant_contact"]["country_name"];
             $ownerEmail = $whoisData["registrant_contact"]["email_address"];
             $ownerPhone = $whoisData["registrant_contact"]["phone_number"] ;
+            
+            ob_start();
+            ?>  
+                <style>
+                    .whois-result h2.title {
+                        font-size: 25px;
+                        line-height: 35px;
+                        margin-bottom: 20px;
+                    }
+                    .whois-result h2.title span {
+                        color: #ff3d00;
+                    }
+                    .whois-result .info-section {
+                        background: #f4f4f4;
+                        margin-bottom: 40px;
+                    }
+                    .whois-result .info-section > * {
+                        padding: 0px 20px;
+                        margin: 0px;
+                    }
+                    .whois-result .info-section h3.title {
+                        background: #000000;
+                        color: #fff;
+                        padding: 5px 10px;
+                        font-size: 16px;
+                        text-transform: uppercase;
+                        font-weight: bold;
+                    }
+                    .whois-result .info-section p {
+                        font-size: 14px;
+                        margin-top: 5px;
+                        color: #000;
+                        border-bottom: 1px solid #dcdcdc;
+                        padding-bottom: 5px;
+                    }
+                </style>
 
-            return "Domain Name: " .  $domainName . "</br>";
-            exit;
+                <div class="whois-result">
+                    <h2 class="title">Whois Record for <span><?php echo $domainName; ?></span></h2>
+
+                    <div class="info-section">
+                        <h3 class="title">Domain info</h3>
+                        <p>Created : <?php echo $createdDate; ?></p>
+                        <p>Update : <?php echo $updateDate; ?></p>
+                        <p>Expire : <?php echo $expireDate; ?></p>
+                    </div>
+
+                    <div class="info-section">
+                        <h3 class="title">Owner info</h3>
+                        <p>Owner Name : <?php echo $ownerName; ?></p>
+                        <p>Company Name : <?php echo $CompanyName; ?></p>
+                        <p>Mailing Address : <?php echo $ownerAddress; ?></p>
+                        <p>City : <?php echo $ownerCity; ?></p>
+                        <p>State : <?php echo $ownerState; ?></p>
+                        <p>Country : <?php echo $ownerCountry; ?></p>
+                        <p>Email : <?php echo $ownerEmail; ?></p>
+                        <p>Phone : <?php echo $ownerEmail; ?></p>
+                    </div>
+
+                    <div class="info-section">
+                        <h3 class="title">Registrar info</h3>
+                        <p>Registrar : <?php echo $domainRegistrar; ?></p>
+                    </div>
+
+
+                </div>
+
+
+            <?php
+            return ob_get_clean();
 
         }else{
             return '<div class="invalid-domain">Domain is invalid or unregistered!</div>';
@@ -81,43 +148,9 @@ function whoisForm( $atts ) {
         'rpage' => '#',
     ), $atts );
 
-    ob_start();
-    ?>
-        
-        <form id="whoisForm" action="<?php echo $atts['rpage']; ?>" method="post">
-            <input type="text" name="whois_domain" placeholder="domain.com">
-            <button type="submit" name="apisearch">Search</button>
-        </form>
-
-        <script>
-        
-        jQuery("#whoisForm").submit(function(event) {
-
-            /* stop form from submitting normally */
-            event.preventDefault();
-
-            /* get some values from elements on the page: */
-            var $form = jQuery(this),
-                domainName = $form.find('input[name="whois_domain"]').val();
-
-            jQuery.ajax({
-                type: "post",
-                data: $form.serialize(),
-                contentType: "application/x-www-form-urlencoded",
-                success: function(responseData) {
-                    console.log(responseData);
-                },
-                error: function(errorThrown) {
-                    console.log(errorThrown);
-                }
-            });
-
-        });
-
-        </script>
-        
-    <?php
-    return ob_get_clean();
-    
+    return '<form action="'.$atts['rpage'].'" method="post">
+                <input type="text" name="whois_domain" placeholder="domain.com">
+                <button type="submit" name="apisearch">Search</button>
+            </form>';
 }
 add_shortcode( 'whois_form', 'whoisForm' );
