@@ -5,7 +5,7 @@
  */
 /*
 Plugin Name: Whois Info
-Plugin URI: http://mashiurz.com
+Plugin URI: https://github.com/shoyebzz/Whois-Search-WordPress-Plugin.git
 Description: This is a plugin to add ip information lookup feature on your website. 
 Author: Mashiur Rahman
 Version: 1.0.0
