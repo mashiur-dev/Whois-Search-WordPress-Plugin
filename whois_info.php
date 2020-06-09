@@ -12,14 +12,6 @@ Version: 1.0.0
 Author URI: http://mashiurz.com
 */
 
-
-// required headers
-// header("Access-Control-Allow-Origin: *");
-// header("Content-Type: application/json; charset=UTF-8");
-// header("Access-Control-Allow-Methods: POST");
-// header("Access-Control-Max-Age: 3600");
-// header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
-
 if (!function_exists('whoisApi')) {
 
     function whoisApi($domainName){
@@ -61,6 +53,8 @@ function whoisResult() {
             $ownerCountry = $whoisData["registrant_contact"]["country_name"];
             $ownerEmail = $whoisData["registrant_contact"]["email_address"];
             $ownerPhone = $whoisData["registrant_contact"]["phone_number"] ;
+
+            $nameServers = $whoisData["name_servers"];
             
             ob_start();
             ?>  
@@ -69,9 +63,15 @@ function whoisResult() {
 
                     <div class="info-section">
                         <h3 class="title">Domain info</h3>
+                        <?php 
+                            $today = strtotime(date("Y-m-d"));
+                            $expireD = strtotime($expireDate);
+                            $diff = ($expireD - $today)/60/60/24;
+                        
+                        ?>
                         <p>Created : <?php echo $createdDate; ?></p>
                         <p>Update : <?php echo $updateDate; ?></p>
-                        <p>Expire : <?php echo $expireDate; ?></p>
+                        <p>Expire : <?php echo $expireDate; if( $diff <= 300 && $diff > 0 ){ echo "<span title='Domain will expire soon!' style='background-image: url(&quot;data:image/svg+xml;base64,PHN2ZyBoZWlnaHQ9JzMwMHB4JyB3aWR0aD0nMzAwcHgnICBmaWxsPSIjMDAwMDAwIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGRhdGEtbmFtZT0iTGF5ZXIgMSIgdmlld0JveD0iMCAwIDEwMCAxMDAiIHg9IjBweCIgeT0iMHB4Ij48dGl0bGU+MTEyYWxsPC90aXRsZT48cGF0aCBkPSJNNDUuODcsMTUuNjlhMi41LDIuNSwwLDAsMC0yLjUsMi41VjQzLjY1SDI2LjQ5YTIuNSwyLjUsMCwxLDAsMCw1SDQ1Ljg3YTIuNSwyLjUsMCwwLDAsMi41LTIuNXYtMjhBMi41LDIuNSwwLDAsMCw0NS44NywxNS42OVoiPjwvcGF0aD48cGF0aCBkPSJNODcsNTMuMzlBNDIuMzcsNDIuMzcsMCwxLDAsNTMuMzksODcsMjQuMDYsMjQuMDYsMCwxLDAsODcsNTMuMzlaTTQ1LjQyLDgyLjc2QTM3LjM0LDM3LjM0LDAsMSwxLDgyLjc2LDQ1LjQyYTM3Ljc3LDM3Ljc3LDAsMCwxLS4zOSw1LjMyQTI0LjA3LDI0LjA3LDAsMCwwLDUwLjc0LDgyLjM3LDM3LjczLDM3LjczLDAsMCwxLDQ1LjQyLDgyLjc2Wm0yNy40Miw5LjE2QTE5LjA3LDE5LjA3LDAsMCwxLDU3LDgzLjM3YTIuNDcsMi40NywwLDAsMC0uNTQtLjg5LDE5LjA2LDE5LjA2LDAsMSwxLDE2LjQzLDkuNDRaIj48L3BhdGg+PHBhdGggZD0iTTcyLjg1LDU4LjQ3YTIuNSwyLjUsMCwwLDAtMi41LDIuNVY3NS43MmEyLjUsMi41LDAsMCwwLDUsMFY2MUEyLjUsMi41LDAsMCwwLDcyLjg1LDU4LjQ3WiI+PC9wYXRoPjxwYXRoIGQ9Ik03Mi44NSw4MC40N2EyLjUsMi41LDAsMCwwLTIuNSwyLjV2Mi43NWEyLjUsMi41LDAsMCwwLDUsMFY4M0EyLjUsMi41LDAsMCwwLDcyLjg1LDgwLjQ3WiI+PC9wYXRoPjwvc3ZnPg==&quot;);'></span>"; } ?></p>
                     </div>
 
                     <div class="info-section">
@@ -89,6 +89,17 @@ function whoisResult() {
                     <div class="info-section">
                         <h3 class="title">Registrar info</h3>
                         <p>Registrar : <?php echo $domainRegistrar; ?></p>
+                    </div>
+                    
+                    <div class="info-section">
+                        <h3 class="title">DNS Hosting provider</h3>
+
+                        <?php foreach($nameServers as $nameServer) : ?>
+
+                        <p><?php echo $nameServer; ?></p>
+
+                        <?php endforeach; ?>
+                       
                     </div>
 
 
@@ -167,6 +178,15 @@ function whoisForm( $atts ) {
                 color: #000;
                 border-bottom: 1px solid #dcdcdc;
                 padding-bottom: 5px;
+            }
+            .whois-result .info-section p span {
+                width: 18px;
+                height: 18px;
+                display: inline-block;
+                background-size: 100%;
+                margin-left: 8px;
+                overflow: hidden;
+                background-repeat: no-repeat;
             }
         </style>
 
