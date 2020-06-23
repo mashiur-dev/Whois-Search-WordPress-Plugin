@@ -23,12 +23,43 @@ if (!function_exists('whoisApi')) {
     }
 
     //whoisApi("nikotei.com");
-
 }
-
 
 // [whois_result]
 function whoisResult() {
+
+    $dns_providers   = [
+        'cloudns.net'           => 'Cloud DNS',
+        'secureserver.net'      => 'GoDaddy',
+        'domaincontrol.com'     => 'GoDaddy',
+        'dnsmadeeasy.com'       => 'DNS Made Easy',
+        'awsdns'                => 'Amazon',
+        'worldnic.com'          => 'Network Solutions',
+        'ultradns'              => 'Ultra DNS',
+        'dns.cogentco'          => 'Cogent Communications',
+        '1and1'                 => '1&1',
+        'ui-dns'                => '1&1',
+        'dynect'                => 'Dyn DNS',
+        'registrar-servers.com' => 'NameCheap',
+        'stabletransit.com'     => 'RackSpace',
+        'gkg.net'               => 'GKG',
+        'easydns.net'           => 'EasyDNS Technologies',
+        'bluehost.com'          => 'BlueHost',
+        'dreamhost'             => 'DreamHost',
+        'hostgator'             => 'HostGator',
+        'websitewelcome.com'    => 'HostGator',
+        'gandi'                 => 'Gandi',
+        'cloudflare'            => 'CloudFlare',
+        'register.com'          => 'Register',
+        'mediatemple.net'       => 'MediaTemple',
+        'hostway'               => 'HostWay',
+        'wixdns.net'            => 'Wix',
+        'ipower'                => 'iPower',
+        'digitalocean.com'      => 'Digital Ocean',
+        'googledomains.com'     => 'Google',
+        'whoisguard.com'        => 'NameCheap',
+    ];
+    $dnsPArry = array_keys($dns_providers);
 
     if( isset($_POST['apisearch']) && !empty($_POST['whois_domain']) ){
 
@@ -39,28 +70,39 @@ function whoisResult() {
         if( isset($whoisData["domain_registered"]) && $whoisData["domain_registered"] == 'yes'){
             // get data into vers
             //$domainStatus = $whoisData["domain_registered"];
-            $createdDate = $whoisData["create_date"];
-            $updateDate = $whoisData["update_date"];
-            $expireDate = $whoisData["expiry_date"];
+            //isset() ? : ''
 
-            $domainRegistrar = $whoisData["domain_registrar"]["registrar_name"];
+            $createdDate = isset($whoisData["create_date"]) ? $whoisData["create_date"] : '';
+            $updateDate = isset($whoisData["update_date"]) ? $whoisData["update_date"] : '';
+            $expireDate = isset($whoisData["expiry_date"]) ? $whoisData["expiry_date"] : '';
 
-            $ownerName = $whoisData["registrant_contact"]["full_name"];
-            $CompanyName = $whoisData["registrant_contact"]["company_name"];
-            $ownerAddress = $whoisData["registrant_contact"]["mailing_address"];
-            $ownerCity = $whoisData["registrant_contact"]["city_name"];
-            $ownerState = $whoisData["registrant_contact"]["state_name"];
-            $ownerCountry = $whoisData["registrant_contact"]["country_name"];
-            $ownerEmail = $whoisData["registrant_contact"]["email_address"];
-            $ownerPhone = $whoisData["registrant_contact"]["phone_number"] ;
+            $domainRegistrar = isset($whoisData["domain_registrar"]["registrar_name"]) ? $whoisData["domain_registrar"]["registrar_name"] : '';
 
-            $nameServers = $whoisData["name_servers"];
+            $ownerName = isset($whoisData["registrant_contact"]["full_name"]) ? $whoisData["registrant_contact"]["full_name"] : '';
+            $CompanyName = isset($whoisData["registrant_contact"]["company_name"]) ? $whoisData["registrant_contact"]["company_name"] : '';
+            $ownerAddress = isset($whoisData["registrant_contact"]["mailing_address"]) ? $whoisData["registrant_contact"]["mailing_address"] : '';
+            $ownerCity = isset($whoisData["registrant_contact"]["city_name"]) ? $whoisData["registrant_contact"]["city_name"] : '';
+            $ownerState = isset($whoisData["registrant_contact"]["state_name"]) ? $whoisData["registrant_contact"]["state_name"] : '';
+            $ownerCountry = isset($whoisData["registrant_contact"]["country_name"]) ? $whoisData["registrant_contact"]["country_name"] : '';
+            $ownerEmail = isset($whoisData["registrant_contact"]["email_address"]) ? $whoisData["registrant_contact"]["email_address"] : '';
+            $ownerPhone = isset($whoisData["registrant_contact"]["phone_number"]) ? $whoisData["registrant_contact"]["phone_number"] : '';
             
+
+            //$nameServers = isset($whoisData["name_servers"]) ? $whoisData["name_servers"] : '';
+            $nameServer = isset($whoisData["name_servers"]) ? $whoisData["name_servers"] : '';
+            
+            if (preg_match('/(?P<domain>[a-z0-9][a-z0-9\-]{1,63}\.[a-z\.]{2,6})$/i', $nameServer[0], $regs)) {
+                $domain = substr($regs['domain'], 0, strpos($regs['domain'], '.'));
+               
+                $dnsDomain = preg_grep( "/^$domain/", $dnsPArry );
+                $dnsName = array_values( array_intersect_key($dns_providers, array_flip($dnsDomain)) );
+            }
+
             ob_start();
             ?>  
                 <div class="whois-result">
                     <h2 class="title">Whois Record for <span><?php echo $domainName; ?></span></h2>
-
+                   
                     <div class="info-section">
                         <h3 class="title">Domain info</h3>
                         <?php 
@@ -93,21 +135,20 @@ function whoisResult() {
                     
                     <div class="info-section">
                         <h3 class="title">DNS Hosting provider</h3>
-
-                        <?php foreach($nameServers as $nameServer) : ?>
-
-                        <p><?php echo $nameServer; ?></p>
-
-                        <?php endforeach; ?>
-                       
+                        <?php
+                        if(!empty($dnsName)){
+                            echo "<p>".$dnsName[0]."</p>";
+                        }else{
+                            foreach($nameServer as $nameServers){
+                                echo "<p>".$nameServers."</p>";
+                            }
+                        }
+                        ?>
                     </div>
-
-
                 </div>
-
-
             <?php
             return ob_get_clean();
+            
 
         }else{
             return '<div class="invalid-domain">Domain is invalid or unregistered!</div>';
@@ -189,12 +230,10 @@ function whoisForm( $atts ) {
                 background-repeat: no-repeat;
             }
         </style>
-
         <form id="whoisForm" action="<?php echo $atts['rpage']; ?>" method="post">
             <input type="text" name="whois_domain" placeholder="domain.com">
             <button type="submit" name="apisearch">Search</button>
         </form>
-
     <?php
         return ob_get_clean();
 }
