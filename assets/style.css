@@ -2,17 +2,19 @@
     margin: 30px 0px;
 }
 #whoisForm input[type="text"] {
-    border: 1px solid #dcdcdc;
-    padding: 10px 10px;
-    width: 70%;
+	border: 1px solid #dcdcdc;
+	padding: 10px 10px;
+	width: 70%;
+	height: 60px;
 }
 #whoisForm button {
-    padding: 10px 15px;
-    font-size: 18px;
-    background: #000000;
-    color: #fff;
-    width: 25%;
-    border: 0px;
+	padding: 10px 15px;
+	font-size: 18px;
+	background: #000000;
+	color: #fff;
+	width: 29%;
+	border: 0px;
+	height: 60px;
 }
 #whoisForm button, #whoisForm input {
     border-radius: 0px;
@@ -61,23 +63,41 @@
 }
 .quickurl {
 	margin-bottom: 12px;
-	overflow: hidden;
+    overflow: hidden;
+    position: relative;
 }
+
 .whois-result .quickurl input {
-	width: 190px;
-	padding: 5px 10px;
+	width: 100%;
+    padding: 10px 10px;
 	line-height: 20px;
 	font-size: 16px;
 }
 .whois-result .quickurl button {
-	padding: 5px 10px;
 	font-size: 14px;
 	border-radius: 1px;
 	margin-bottom: 2px;
 	line-height: 21px;
 	text-transform: uppercase;
+	position: absolute;
+	right: 0;
+	top: 1px;
+	bottom: 0px;
+	padding: 10px 15px;
+	height: 100%;
+	text-indent: -99999px;
+	background-size: 24px;
+	background-repeat: no-repeat;
+	background-color: transparent;
+	background-position: center center;
 }
 .whois-result .quickurl button:active {
 	color: #000;
 	background: #fff;
+	background-size: 24px;
+	background-repeat: no-repeat;
+	background-position: center center;
+	background-color: transparent;
 }
+
+
