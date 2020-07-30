@@ -69,9 +69,10 @@
 
 .whois-result .quickurl input {
 	width: 100%;
-    padding: 10px 10px;
+	padding: 10px 10px;
 	line-height: 20px;
 	font-size: 16px;
+	border: 1px solid #e4e4e4;
 }
 .whois-result .quickurl button {
 	font-size: 14px;
@@ -83,13 +84,14 @@
 	right: 0;
 	top: 1px;
 	bottom: 0px;
-	padding: 10px 15px;
+	padding: 10px 20px;
 	height: 100%;
 	text-indent: -99999px;
 	background-size: 24px;
 	background-repeat: no-repeat;
 	background-color: transparent;
 	background-position: center center;
+	border: 0;
 }
 .whois-result .quickurl button:active {
 	color: #000;
